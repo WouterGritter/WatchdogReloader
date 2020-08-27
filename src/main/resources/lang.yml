@@ -1,3 +1,8 @@
+# All messages are sent through Java's String#format method.
+# This means there is a lot of customization!
+# For example, to format a number with 2 leading decimal points: %.2f
+# More info: https://dzone.com/articles/java-string-format-examples
+
 common:
   need-player: '&cYou need to be a player to run this command!'
 
