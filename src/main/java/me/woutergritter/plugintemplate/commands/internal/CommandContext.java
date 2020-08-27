@@ -27,19 +27,39 @@ public class CommandContext {
         return args;
     }
 
+    public String arg(int index) {
+        if(index < 0 || index >= args.length) {
+            return null;
+        }
+
+        return args[index];
+    }
+
+    public boolean argEquals(int index, String s) {
+        if(index < 0 || index >= args.length) {
+            return false;
+        }
+
+        return args[index].equalsIgnoreCase(s);
+    }
+
+    public int argsLen() {
+        return args.length;
+    }
+
     /**
      * Actual path that will be used:
      * COMMAND-cmd.PATH
      */
     public void send(String path, Object... args) {
-        sender.sendMessage(plugin.getLang().getMessage(command.getCommand() + "-cmd." + path, args));
+        plugin.getLang().sendMessage(sender, command.getCommand() + "-cmd." + path, args);
     }
 
     /**
      * Uses the actual path that is given in the arguments.
      */
     public void sendAbsolute(String absolutePath, Object... args) {
-        sender.sendMessage(plugin.getLang().getMessage(absolutePath, args));
+        plugin.getLang().sendMessage(sender, absolutePath, args);
     }
 
     public Player checkPlayer() {
@@ -48,5 +68,11 @@ public class CommandContext {
         }
 
         return (Player) sender;
+    }
+
+    public void checkPermission(String permission) {
+        if(!sender.hasPermission(permission)) {
+            throw new CommandInterrupt("common.no-permission");
+        }
     }
 }
