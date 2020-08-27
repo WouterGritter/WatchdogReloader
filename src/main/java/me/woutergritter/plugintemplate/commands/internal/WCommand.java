@@ -6,8 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public abstract class WCommand implements CommandExecutor {
-    private final Main plugin;
-    private final String command;
+    protected final Main plugin;
+    protected final String command;
 
     public WCommand(Main plugin, String command) {
         this.plugin = plugin;
