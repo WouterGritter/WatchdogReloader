@@ -1,0 +1,5 @@
+common:
+  need-player: '&cYou need to be a player to run this command!'
+
+example-cmd:
+  output: '&aThe /example command is working!'
