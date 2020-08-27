@@ -5,6 +5,8 @@
 
 common:
   need-player: '&cYou need to be a player to run this command!'
+  no-permission: '&cYou don''t have permissions to do this!'
+  invalid-args: '&cInvalid arguments! Type %s for help.'
 
 example-cmd:
   output: '&aThe /example command is working!'
