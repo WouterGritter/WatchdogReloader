@@ -25,13 +25,21 @@
     </properties>
 
     <repositories>
+        <!-- Spigot repo -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
+        <!-- Used by lots of plugins -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -44,7 +52,7 @@
         <profile>
             <id>Dev output</id>
             <build>
-                <directory>C:/Users/woute/Dropbox/Test Server/1.15.2/plugins/</directory>
+                <directory>C:/Wouter/dev/minecraft_1_8_8/plugins/</directory>
             </build>
         </profile>
     </profiles>
