@@ -81,4 +81,10 @@ public class CommandContext {
             throw new CommandInterrupt("common.no-permission");
         }
     }
+
+    public void checkNumArgs(int minArgs, String usage) {
+        if(args.length < minArgs) {
+            throw new CommandInterrupt("common.usage", usage);
+        }
+    }
 }
