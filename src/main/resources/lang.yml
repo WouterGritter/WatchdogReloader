@@ -8,6 +8,8 @@ common:
   no-permission: '&cYou don''t have permissions to do this!'
   invalid-args: '&cInvalid arguments! Type %s for help.'
   usage: '&cUsage: %s'
+  no-online-player-found: '&cThere is no player online called ''%s''!'
+  no-offline-player-found: '&cNo player called ''%s'' has ever played on the server!'
 
 example-cmd:
   output: '&aThe /example command is working!'

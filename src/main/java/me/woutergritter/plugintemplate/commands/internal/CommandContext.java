@@ -1,6 +1,8 @@
 package me.woutergritter.plugintemplate.commands.internal;
 
 import me.woutergritter.plugintemplate.Main;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -74,6 +76,26 @@ public class CommandContext {
         }
 
         return (Player) sender;
+    }
+
+    public Player checkOnlinePlayer(int argsIndex) {
+        String name = args[argsIndex];
+        Player player = Bukkit.getPlayer(name);
+        if(player == null) {
+            throw new CommandInterrupt("common.no-online-player-found");
+        }
+
+        return player;
+    }
+
+    public OfflinePlayer checkOfflinePlayer(int argsIndex) {
+        String name = args[argsIndex];
+        OfflinePlayer player = Bukkit.getPlayer(name);
+        if(!(player.hasPlayedBefore() || player.isOnline())) {
+            throw new CommandInterrupt("common.no-offline-player-found");
+        }
+
+        return player;
     }
 
     public void checkPermission(String permission) {
