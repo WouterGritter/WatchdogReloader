@@ -9,7 +9,8 @@ public class Main extends JavaPlugin {
     // -- Global configuration files -- //
     private Config config;
     private LangConfig langConfig;
-    // -- //
+
+    // -- Managers -- //
 
     @Override
     public void onEnable() {
@@ -17,7 +18,9 @@ public class Main extends JavaPlugin {
         config = new Config(this, "config.yml");
         langConfig = new LangConfig(this, "lang.yml");
 
-        // Register commands
+        // Managers
+
+        // Commands
         new ExampleCMD(this).register();
     }
 
