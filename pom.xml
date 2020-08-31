@@ -6,20 +6,20 @@
 
     <!-- Change this! -->
     <groupId>me.woutergritter</groupId>
-    <artifactId>plugin-template</artifactId>
+    <artifactId>WatchdogReloader</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- Plugin information (used in plugin.yml) -->
     <!-- Change this! -->
-    <name>PluginTemplate</name>
-    <description>Plugin template</description>
+    <name>WatchdogReloader</name>
+    <description>WatchdogReloader</description>
     <url>https://woutergritter.me/</url>
 
     <properties>
         <!-- Plugin information (used in plugin.yml) -->
         <!-- Change this! -->
         <author>Wouter Gritter</author>
-        <mainClass>me.woutergritter.plugintemplate.Main</mainClass>
+        <mainClass>me.woutergritter.watchdogreloader.Main</mainClass>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

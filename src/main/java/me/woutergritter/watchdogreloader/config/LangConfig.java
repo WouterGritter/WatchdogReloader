@@ -1,6 +1,6 @@
-package me.woutergritter.plugintemplate.config;
+package me.woutergritter.watchdogreloader.config;
 
-import me.woutergritter.plugintemplate.Main;
+import me.woutergritter.watchdogreloader.Main;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -1,4 +1,4 @@
-package me.woutergritter.plugintemplate.commands.internal;
+package me.woutergritter.watchdogreloader.commands.internal;
 
 public class CommandInterrupt extends RuntimeException {
     private final boolean absolutePath;

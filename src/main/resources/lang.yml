@@ -13,5 +13,10 @@ common:
   invalid-number: '&cInvalid number ''%s''!'
   invalid-decimal-number: '&cInvalid decimal number ''%s''!'
 
-example-cmd:
-  output: '&aThe /example command is working!'
+watch-cmd:
+  already-watched: '&cThat filename is already being watched!'
+  success: '&aNow watching file &6%s&a.'
+
+unwatch-cmd:
+  not-watched: '&cThat filename is not being watched!'
+  success: '&aNot watching file &6%s &aanymore.'

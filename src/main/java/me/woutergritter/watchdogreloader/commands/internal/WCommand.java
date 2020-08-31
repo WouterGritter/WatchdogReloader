@@ -1,6 +1,6 @@
-package me.woutergritter.plugintemplate.commands.internal;
+package me.woutergritter.watchdogreloader.commands.internal;
 
-import me.woutergritter.plugintemplate.Main;
+import me.woutergritter.watchdogreloader.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;

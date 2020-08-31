@@ -1,14 +1,12 @@
-package me.woutergritter.plugintemplate.config;
+package me.woutergritter.watchdogreloader.config;
 
-import me.woutergritter.plugintemplate.Main;
+import me.woutergritter.watchdogreloader.Main;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Objects;
 
 public class Config extends YamlConfiguration {
