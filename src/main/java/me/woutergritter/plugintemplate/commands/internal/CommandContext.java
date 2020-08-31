@@ -35,12 +35,18 @@ public class CommandContext {
         return args[index];
     }
 
-    public boolean argEquals(int index, String s) {
+    public boolean argEquals(int index, String... s) {
         if(index < 0 || index >= args.length) {
             return false;
         }
 
-        return args[index].equalsIgnoreCase(s);
+        for(int i = 0; i < s.length; i++) {
+            if(args[index].equalsIgnoreCase(s[i])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public int argsLen() {
