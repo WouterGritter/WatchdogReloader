@@ -15,8 +15,11 @@ public class LangConfig extends Config {
 
     public String getMessage(String path, Object... args) {
         String message;
-        if(!isSet(path)) {
+        if(!isSet(path) && (getDefaults() == null || !getDefaults().isSet(path))) {
             message = path;
+            if(args.length > 0) {
+                message += " [" + StringUtils.join(args, ", ") + "]";
+            }
         }else if(isList(path)) {
             List<String> messages = getStringList(path);
             message = StringUtils.join(messages.iterator(), '\n');
