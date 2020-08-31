@@ -72,27 +72,27 @@ public class CommandContext {
 
     public Player checkPlayer() {
         if(!(sender instanceof Player)) {
-            throw new CommandInterrupt("common.need-player");
+            throw new CommandInterrupt(true, "common.need-player");
         }
 
         return (Player) sender;
     }
 
-    public Player checkOnlinePlayer(int argsIndex) {
-        String name = args[argsIndex];
-        Player player = Bukkit.getPlayer(name);
+    public Player checkOnlinePlayer(int argIndex) {
+        Player player = Bukkit.getPlayer(args[argIndex]);
+
         if(player == null) {
-            throw new CommandInterrupt("common.no-online-player-found");
+            throw new CommandInterrupt(true, "common.no-online-player-found", args[argIndex]);
         }
 
         return player;
     }
 
-    public OfflinePlayer checkOfflinePlayer(int argsIndex) {
-        String name = args[argsIndex];
-        OfflinePlayer player = Bukkit.getPlayer(name);
+    public OfflinePlayer checkOfflinePlayer(int argIndex) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[argIndex]);
+
         if(!(player.hasPlayedBefore() || player.isOnline())) {
-            throw new CommandInterrupt("common.no-offline-player-found");
+            throw new CommandInterrupt(true, "common.no-offline-player-found", args[argIndex]);
         }
 
         return player;
@@ -100,13 +100,29 @@ public class CommandContext {
 
     public void checkPermission(String permission) {
         if(!sender.hasPermission(permission)) {
-            throw new CommandInterrupt("common.no-permission");
+            throw new CommandInterrupt(true, "common.no-permission");
         }
     }
 
     public void checkNumArgs(int minArgs, String usage) {
         if(args.length < minArgs) {
-            throw new CommandInterrupt("common.usage", usage);
+            throw new CommandInterrupt(true, "common.usage", usage);
+        }
+    }
+
+    public int checkInteger(int argIndex) {
+        try{
+            return Integer.parseInt(args[argIndex]);
+        }catch(NumberFormatException e) {
+            throw new CommandInterrupt(true, "common.invalid-number", args[argIndex]);
+        }
+    }
+
+    public double checkDouble(int argIndex) {
+        try{
+            return Double.parseDouble(args[argIndex]);
+        }catch(NumberFormatException e) {
+            throw new CommandInterrupt(true, "common.invalid-decimal-number", args[argIndex]);
         }
     }
 }

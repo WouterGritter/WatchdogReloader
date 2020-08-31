@@ -10,6 +10,8 @@ common:
   usage: '&cUsage: %s'
   no-online-player-found: '&cThere is no player online called ''%s''!'
   no-offline-player-found: '&cNo player called ''%s'' has ever played on the server!'
+  invalid-number: '&cInvalid number ''%s''!'
+  invalid-decimal-number: '&cInvalid decimal number ''%s''!'
 
 example-cmd:
   output: '&aThe /example command is working!'
