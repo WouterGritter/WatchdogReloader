@@ -27,7 +27,11 @@ public abstract class WCommand extends Command {
         try{
             this.execute(ctx);
         }catch(CommandInterrupt interrupt) {
-            sender.sendMessage(plugin.getLang().getMessage(interrupt.getPath(), interrupt.getArgs()));
+            if(interrupt.isAbsolutePath()) {
+                ctx.sendAbsolute(interrupt.getPath(), interrupt.getArgs());
+            }else{
+                ctx.send(interrupt.getPath(), interrupt.getArgs());
+            }
         }
 
         return true;
