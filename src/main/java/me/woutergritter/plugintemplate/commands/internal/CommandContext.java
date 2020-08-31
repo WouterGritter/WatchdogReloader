@@ -42,8 +42,8 @@ public class CommandContext {
             return false;
         }
 
-        for(int i = 0; i < s.length; i++) {
-            if(args[index].equalsIgnoreCase(s[i])) {
+        for (String value : s) {
+            if (args[index].equalsIgnoreCase(value)) {
                 return true;
             }
         }
