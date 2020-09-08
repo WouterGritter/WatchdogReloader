@@ -1,6 +1,7 @@
 package me.woutergritter.watchdogreloader.watchdog;
 
 import me.woutergritter.watchdogreloader.Main;
+import me.woutergritter.watchdogreloader.config.Config;
 import org.bukkit.Bukkit;
 
 import java.io.*;
@@ -15,8 +16,7 @@ public class WatchdogManager {
     private File pluginsFolder;
     private WatchService watcher;
 
-    private List<String> watchedFiles = new ArrayList<>();
-    private File watchedFilesFile;
+    private Config watchedConfig;
 
     private List<String> changedFiles = new ArrayList<>();
 
@@ -34,8 +34,7 @@ public class WatchdogManager {
             e.printStackTrace();
         }
 
-        watchedFilesFile = new File(plugin.getDataFolder(), "watched-files.dat");
-        loadWatchedFilesFile();
+        watchedConfig = new Config(plugin, "watched-files.yml");
 
         Bukkit.getScheduler().runTaskTimer(plugin, this::poll, 10, 10);
     }
@@ -69,7 +68,7 @@ public class WatchdogManager {
         if(!changedFiles.contains(filename)) {
             changedFiles.add(filename);
 
-            if(!watchedFiles.contains(filename)) {
+            if(!isFileWatched(filename)) {
                 plugin.broadcast("------------");
                 plugin.broadcast("A plugin file changed:");
                 plugin.broadcast(filename);
@@ -80,7 +79,7 @@ public class WatchdogManager {
             }
         }
 
-        if(watchedFiles.contains(filename)) {
+        if(isFileWatched(filename)) {
             // Reload the server!
             plugin.broadcast("A plugin file that is watched has changed! (" + filename + ")");
             plugin.broadcast("Reloading the server.");
@@ -90,60 +89,27 @@ public class WatchdogManager {
     }
 
     public boolean isFileWatched(String filename) {
-        return watchedFiles.contains(filename);
+        return getWatchedFiles().contains(filename);
     }
 
     public void setFileWatched(String filename, boolean isWatched) {
-        if(isWatched && !watchedFiles.contains(filename)) {
-            watchedFiles.add(filename);
-        }else if(!isWatched && watchedFiles.contains(filename)) {
-            watchedFiles.remove(filename);
+        List<String> watched = watchedConfig.getStringList("watched");
+
+        if(isWatched && !watched.contains(filename)) {
+            watched.add(filename);
+        }else if(!isWatched) {
+            watched.remove(filename);
         }
 
-        saveWatchedFilesFile();
+        watchedConfig.set("watched", watched);
+        watchedConfig.save();
+    }
+
+    public List<String> getWatchedFiles() {
+        return Collections.unmodifiableList(watchedConfig.getStringList("watched"));
     }
 
     public List<String> getChangedFiles() {
         return Collections.unmodifiableList(changedFiles);
-    }
-
-    public List<String> getWatchedFiles() {
-        return Collections.unmodifiableList(watchedFiles);
-    }
-
-    private void loadWatchedFilesFile() {
-        if(!watchedFilesFile.exists()) {
-            saveWatchedFilesFile();
-        }
-
-        try{
-            DataInputStream dis = new DataInputStream(new FileInputStream(watchedFilesFile));
-
-            int watchedFilesSize = dis.readInt();
-            watchedFiles.clear();
-            for(int i = 0; i < watchedFilesSize; i++) {
-                String watchedFile = dis.readUTF();
-                watchedFiles.add(watchedFile);
-            }
-
-            dis.close();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveWatchedFilesFile() {
-        try{
-            DataOutputStream dos = new DataOutputStream(new FileOutputStream(watchedFilesFile));
-
-            dos.writeInt(watchedFiles.size());
-            for(String watchedFile : watchedFiles) {
-                dos.writeUTF(watchedFile);
-            }
-
-            dos.close();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
     }
 }
