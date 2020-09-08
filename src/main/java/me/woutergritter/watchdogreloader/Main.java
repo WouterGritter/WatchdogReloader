@@ -34,12 +34,12 @@ public class Main extends JavaPlugin {
     public void onDisable() {
     }
 
-    public void broadcast(String msg) {
-        getLogger().info(msg);
-
+    public void broadcast(String path, Object... args) {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(msg);
+            getLang().sendMessage(player, path, args);
         });
+
+        getLang().sendMessage(Bukkit.getConsoleSender(), path, args);
     }
 
     public WatchdogManager getWatchdogManager() {
