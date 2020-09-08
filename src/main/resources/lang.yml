@@ -20,3 +20,18 @@ watch-cmd:
 unwatch-cmd:
   not-watched: '&cThat filename is not being watched!'
   success: '&aNot watching file &6%s &aanymore.'
+
+watchdog:
+  unwatched-file-changed:
+    - '&2--------------------------------------'
+    - '&3A plugin file changed:'
+    - '&f%1$s'
+    - '&3If you would like to reload the server'
+    - '&3every time that jar file changes, type'
+    - '&3the command /watch %1$s'
+    - '&2--------------------------------------'
+
+  watched-file-changed:
+    - '&3A plugin file that is watched has changed:'
+    - '&3%1$s'
+    - '&3Reloading the server.'

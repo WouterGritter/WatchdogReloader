@@ -69,20 +69,13 @@ public class WatchdogManager {
             changedFiles.add(filename);
 
             if(!isFileWatched(filename)) {
-                plugin.broadcast("------------");
-                plugin.broadcast("A plugin file changed:");
-                plugin.broadcast(filename);
-                plugin.broadcast("If you would like to reload the server");
-                plugin.broadcast("every time that jar file changes, type");
-                plugin.broadcast("the command /watch " + filename);
-                plugin.broadcast("------------");
+                plugin.broadcast(plugin.getLang().getMessage("watchdog.unwatched-file-changed", filename));
             }
         }
 
         if(isFileWatched(filename)) {
             // Reload the server!
-            plugin.broadcast("A plugin file that is watched has changed! (" + filename + ")");
-            plugin.broadcast("Reloading the server.");
+            plugin.broadcast(plugin.getLang().getMessage("watchdog.watched-file-changed", filename));
 
             Bukkit.reload();
         }
