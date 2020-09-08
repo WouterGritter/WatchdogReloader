@@ -84,7 +84,8 @@ public class WatchdogManager {
             // Reload the server!
             plugin.broadcast("A plugin file that is watched has changed! (" + filename + ")");
             plugin.broadcast("Reloading the server.");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "reload");
+
+            Bukkit.reload();
         }
     }
 
