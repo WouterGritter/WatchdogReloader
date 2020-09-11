@@ -69,13 +69,13 @@ public class WatchdogManager {
             changedFiles.add(filename);
 
             if(!isFileWatched(filename)) {
-                plugin.broadcast(plugin.getLang().getMessage("watchdog.unwatched-file-changed", filename));
+                plugin.broadcast("watchdog.unwatched-file-changed", filename);
             }
         }
 
         if(isFileWatched(filename)) {
             // Reload the server!
-            plugin.broadcast(plugin.getLang().getMessage("watchdog.watched-file-changed", filename));
+            plugin.broadcast("watchdog.watched-file-changed", filename);
 
             Bukkit.reload();
         }
