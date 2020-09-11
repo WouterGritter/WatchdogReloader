@@ -4,28 +4,31 @@ import me.woutergritter.watchdogreloader.Main;
 import me.woutergritter.watchdogreloader.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class WatchdogManager {
     private final Main plugin;
     private final File pluginsFolder;
 
-    private String cfg_reloadCommand;
+    private final String cfg_reloadCommand;
+    private final int cfg_actionDelay;
 
     private WatchService watcher;
 
-    private Config watchedPluginsConfig;
+    private final Config watchedPluginsConfig;
+
+    private Map<String, BukkitTask> delayedActions = new HashMap<>(); // <File name, Task>
 
     public WatchdogManager(Main plugin) {
         this.plugin = plugin;
         this.pluginsFolder = plugin.getDataFolder().getParentFile();
 
         cfg_reloadCommand = plugin.getConfig().getString("reload-command");
+        cfg_actionDelay = plugin.getConfig().getInt("action-delay");
 
         try {
             Path path = pluginsFolder.toPath();
@@ -67,25 +70,35 @@ public class WatchdogManager {
     }
 
     private void onJarFileChange(File file) {
-        String filename = file.getName();
-        Plugin other = getPlugin(filename);
+        final String filename = file.getName();
 
-        if(other == null) {
-            plugin.broadcast("watchdog.non-plugin-file-changed", filename);
-            return;
+        BukkitTask currentTask = delayedActions.get(filename);
+        if(currentTask != null) {
+            currentTask.cancel();
+            delayedActions.remove(filename);
         }
 
-        String pluginName = other.getName();
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Plugin other = getPlugin(filename);
 
-        if(isPluginWatched(pluginName)) {
-            // Execute the reload command.
-            String cmd = String.format(cfg_reloadCommand, plugin.getName());
-            plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName(), cmd);
+            if(other == null) {
+                plugin.broadcast("watchdog.non-plugin-file-changed", filename);
+                return;
+            }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
-        }else {
-            plugin.broadcast("watchdog.unwatched-plugin-changed", filename, plugin.getName());
-        }
+            String pluginName = other.getName();
+
+            if(isPluginWatched(pluginName)) {
+                // Execute the reload command.
+                String cmd = String.format(cfg_reloadCommand, plugin.getName());
+                plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName(), cmd);
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+            }else {
+                plugin.broadcast("watchdog.unwatched-plugin-changed", filename, plugin.getName());
+            }
+        }, cfg_actionDelay);
+        delayedActions.put(filename, task);
     }
 
     private Plugin getPlugin(String filename) {

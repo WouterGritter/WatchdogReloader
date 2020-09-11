@@ -6,3 +6,6 @@
 # 'reload'
 # 'plugman reload %1$s'
 reload-command: 'reload'
+
+# Delay in ticks between detecting a file change, and performing an action
+action-delay: 20
