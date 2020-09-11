@@ -4,7 +4,9 @@ import me.woutergritter.watchdogreloader.Main;
 import me.woutergritter.watchdogreloader.commands.internal.CommandContext;
 import me.woutergritter.watchdogreloader.commands.internal.CommandInterrupt;
 import me.woutergritter.watchdogreloader.commands.internal.WCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,14 +22,14 @@ public class WatchCMD extends WCommand {
     public void execute(CommandContext ctx) {
         ctx.checkNumArgs(1, "/watch <filename>");
 
-        String filename = ctx.arg(0);
-        if(plugin.getWatchdogManager().isFileWatched(filename)) {
-            throw new CommandInterrupt("already-watched", filename);
+        String pluginName = ctx.arg(0);
+        if(plugin.getWatchdogManager().isPluginWatched(pluginName)) {
+            throw new CommandInterrupt("already-watched", pluginName);
         }
 
-        plugin.getWatchdogManager().setFileWatched(filename, true);
+        plugin.getWatchdogManager().setPluginWatched(pluginName, true);
 
-        ctx.send("success", filename);
+        ctx.send("success", pluginName);
     }
 
     @Override
@@ -38,16 +40,14 @@ public class WatchCMD extends WCommand {
 
         List<String> res = new ArrayList<>();
 
-        plugin.getWatchdogManager().getChangedFiles().forEach(filename -> {
-            if(plugin.getWatchdogManager().isFileWatched(filename)) {
-                // The file is already being watched..
-                return;
-            }
+        for(Plugin other : Bukkit.getPluginManager().getPlugins()) {
+            String pluginName = other.getName();
 
-            if(filename.toLowerCase().startsWith(args[0].toLowerCase())) {
-                res.add(filename);
+            if(pluginName.toLowerCase().startsWith(args[0].toLowerCase()) &&
+                    !plugin.getWatchdogManager().isPluginWatched(pluginName)) {
+                res.add(pluginName);
             }
-        });
+        }
 
         return res;
     }

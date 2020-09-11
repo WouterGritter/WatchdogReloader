@@ -14,25 +14,25 @@ common:
   invalid-decimal-number: '&cInvalid decimal number ''%s''!'
 
 watch-cmd:
-  already-watched: '&cThat filename is already being watched!'
-  success: '&aNow watching file &6%s&a.'
+  already-watched: '&cThat plugin is already being watched!'
+  success: '&aNow watching plugin &6%s&a.'
 
 unwatch-cmd:
-  not-watched: '&cThat filename is not being watched!'
-  success: '&aNot watching file &6%s &aanymore.'
+  not-watched: '&cThat plugin is not being watched!'
+  success: '&aNot watching plugin &6%s &aanymore.'
 
 watchdog:
-  unwatched-file-changed:
+  unwatched-plugin-changed:
     - '&2--------------------------------------'
     - '&3A plugin file changed:'
     - '&3File: &7%1$s'
     - '&3Plugin: &7%2$s'
     - '&3If you would like to reload the server'
     - '&3every time that jar file changes, type'
-    - '&3the command &7/watch %1$s'
+    - '&3the command &7/watch %2$s'
     - '&2--------------------------------------'
 
-  watched-file-changed:
+  watched-plugin-changed:
     - '&2--------------------------------------'
     - '&3A plugin file that is watched has changed:'
     - '&3File: &7%1$s'

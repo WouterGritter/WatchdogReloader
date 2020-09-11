@@ -19,14 +19,14 @@ public class UnwatchCMD extends WCommand {
     public void execute(CommandContext ctx) {
         ctx.checkNumArgs(1, "/unwatch <filename>");
 
-        String filename = ctx.arg(0);
-        if(!plugin.getWatchdogManager().isFileWatched(filename)) {
-            throw new CommandInterrupt("not-watched", filename);
+        String pluginName = ctx.arg(0);
+        if(!plugin.getWatchdogManager().isPluginWatched(pluginName)) {
+            throw new CommandInterrupt("not-watched", pluginName);
         }
 
-        plugin.getWatchdogManager().setFileWatched(filename, false);
+        plugin.getWatchdogManager().setPluginWatched(pluginName, false);
 
-        ctx.send("success", filename);
+        ctx.send("success", pluginName);
     }
 
     @Override
@@ -37,9 +37,9 @@ public class UnwatchCMD extends WCommand {
 
         List<String> res = new ArrayList<>();
 
-        plugin.getWatchdogManager().getWatchedFiles().forEach(filename -> {
-            if(filename.toLowerCase().startsWith(args[0].toLowerCase())) {
-                res.add(filename);
+        plugin.getWatchdogManager().getWatchedPlugins().forEach(pluginName -> {
+            if(pluginName.toLowerCase().startsWith(args[0].toLowerCase())) {
+                res.add(pluginName);
             }
         });
 

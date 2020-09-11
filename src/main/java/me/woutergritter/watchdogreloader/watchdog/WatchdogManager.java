@@ -19,9 +19,7 @@ public class WatchdogManager {
 
     private WatchService watcher;
 
-    private Config watchedConfig;
-
-    private List<String> changedFiles = new ArrayList<>();
+    private Config watchedPluginsConfig;
 
     public WatchdogManager(Main plugin) {
         this.plugin = plugin;
@@ -39,7 +37,7 @@ public class WatchdogManager {
             e.printStackTrace();
         }
 
-        watchedConfig = new Config(plugin, "watched-files.yml");
+        watchedPluginsConfig = new Config(plugin, "watched-plugins.yml");
 
         Bukkit.getScheduler().runTaskTimer(plugin, this::poll, 10, 10);
     }
@@ -72,26 +70,21 @@ public class WatchdogManager {
         String filename = file.getName();
         Plugin other = getPlugin(filename);
 
-        if(!changedFiles.contains(filename)) {
-            changedFiles.add(filename);
-
-            if(other == null) {
-                plugin.broadcast("watchdog.non-plugin-file-changed", filename);
-            }else if(!isFileWatched(filename)) {
-                plugin.broadcast("watchdog.unwatched-file-changed", filename, plugin.getName());
-            }
-        }
-
         if(other == null) {
+            plugin.broadcast("watchdog.non-plugin-file-changed", filename);
             return;
         }
 
-        if(isFileWatched(filename)) {
+        String pluginName = other.getName();
+
+        if(isPluginWatched(pluginName)) {
             // Execute the reload command.
             String cmd = String.format(cfg_reloadCommand, plugin.getName());
-            plugin.broadcast("watchdog.watched-file-changed", filename, plugin.getName(), cmd);
+            plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName(), cmd);
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+        }else {
+            plugin.broadcast("watchdog.unwatched-plugin-changed", filename, plugin.getName());
         }
     }
 
@@ -115,28 +108,24 @@ public class WatchdogManager {
         return null;
     }
 
-    public boolean isFileWatched(String filename) {
-        return getWatchedFiles().contains(filename);
+    public boolean isPluginWatched(String pluginName) {
+        return getWatchedPlugins().contains(pluginName);
     }
 
-    public void setFileWatched(String filename, boolean isWatched) {
-        List<String> watched = watchedConfig.getStringList("watched");
+    public void setPluginWatched(String pluginName, boolean isWatched) {
+        List<String> watched = watchedPluginsConfig.getStringList("watched");
 
-        if(isWatched && !watched.contains(filename)) {
-            watched.add(filename);
+        if(isWatched && !watched.contains(pluginName)) {
+            watched.add(pluginName);
         }else if(!isWatched) {
-            watched.remove(filename);
+            watched.remove(pluginName);
         }
 
-        watchedConfig.set("watched", watched);
-        watchedConfig.save();
+        watchedPluginsConfig.set("watched", watched);
+        watchedPluginsConfig.save();
     }
 
-    public List<String> getWatchedFiles() {
-        return Collections.unmodifiableList(watchedConfig.getStringList("watched"));
-    }
-
-    public List<String> getChangedFiles() {
-        return Collections.unmodifiableList(changedFiles);
+    public List<String> getWatchedPlugins() {
+        return Collections.unmodifiableList(watchedPluginsConfig.getStringList("watched"));
     }
 }
