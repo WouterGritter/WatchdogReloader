@@ -21,7 +21,7 @@ public class WatchdogManager {
 
     private final Config watchedPluginsConfig;
 
-    private Map<String, BukkitTask> delayedActions = new HashMap<>(); // <File name, Task>
+    private final Map<String, BukkitTask> delayedActions = new HashMap<>(); // <File name, Task>
 
     public WatchdogManager(Main plugin) {
         this.plugin = plugin;
