@@ -3,6 +3,7 @@ package me.woutergritter.watchdogreloader.watchdog;
 import me.woutergritter.watchdogreloader.Main;
 import me.woutergritter.watchdogreloader.config.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.nio.file.*;
@@ -12,8 +13,10 @@ import java.util.List;
 
 public class WatchdogManager {
     private final Main plugin;
+    private final File pluginsFolder;
 
-    private File pluginsFolder;
+    private String cfg_reloadCommand;
+
     private WatchService watcher;
 
     private Config watchedConfig;
@@ -23,6 +26,8 @@ public class WatchdogManager {
     public WatchdogManager(Main plugin) {
         this.plugin = plugin;
         this.pluginsFolder = plugin.getDataFolder().getParentFile();
+
+        cfg_reloadCommand = plugin.getConfig().getString("reload-command");
 
         try {
             Path path = pluginsFolder.toPath();
@@ -65,20 +70,49 @@ public class WatchdogManager {
 
     private void onJarFileChange(File file) {
         String filename = file.getName();
+        Plugin other = getPlugin(filename);
+
         if(!changedFiles.contains(filename)) {
             changedFiles.add(filename);
 
-            if(!isFileWatched(filename)) {
-                plugin.broadcast("watchdog.unwatched-file-changed", filename);
+            if(other == null) {
+                plugin.broadcast("watchdog.non-plugin-file-changed", filename);
+            }else if(!isFileWatched(filename)) {
+                plugin.broadcast("watchdog.unwatched-file-changed", filename, plugin.getName());
             }
         }
 
-        if(isFileWatched(filename)) {
-            // Reload the server!
-            plugin.broadcast("watchdog.watched-file-changed", filename);
-
-            Bukkit.reload();
+        if(other == null) {
+            return;
         }
+
+        if(isFileWatched(filename)) {
+            // Execute the reload command.
+            String cmd = String.format(cfg_reloadCommand, plugin.getName());
+            plugin.broadcast("watchdog.watched-file-changed", filename, plugin.getName(), cmd);
+
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+        }
+    }
+
+    private Plugin getPlugin(String filename) {
+        for(Plugin other : Bukkit.getPluginManager().getPlugins()) {
+            if(other == null) {
+                continue;
+            }
+
+            String pluginFilename = new java.io.File(other.getClass().getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath())
+                    .getName();
+
+            if(pluginFilename.equals(filename)) {
+                return other;
+            }
+        }
+
+        return null;
     }
 
     public boolean isFileWatched(String filename) {

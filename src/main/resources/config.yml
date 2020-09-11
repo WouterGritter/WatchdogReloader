@@ -1,0 +1,8 @@
+# The command to execute when a watched plugin file is changed.
+# Placeholders:
+# %1$s  -  The plugin name
+#
+# Examples:
+# 'reload'
+# 'plugman reload %1$s'
+reload-command: 'reload'

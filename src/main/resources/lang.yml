@@ -25,13 +25,25 @@ watchdog:
   unwatched-file-changed:
     - '&2--------------------------------------'
     - '&3A plugin file changed:'
-    - '&f%1$s'
+    - '&3File: &7%1$s'
+    - '&3Plugin: &7%2$s'
     - '&3If you would like to reload the server'
     - '&3every time that jar file changes, type'
-    - '&3the command /watch %1$s'
+    - '&3the command &7/watch %1$s'
     - '&2--------------------------------------'
 
   watched-file-changed:
+    - '&2--------------------------------------'
     - '&3A plugin file that is watched has changed:'
-    - '&3%1$s'
-    - '&3Reloading the server.'
+    - '&3File: &7%1$s'
+    - '&3Plugin: &7%2$s'
+    - '&3Executing the reload command: &7/%3$s'
+    - '&2--------------------------------------'
+
+  non-plugin-file-changed:
+    - '&2--------------------------------------'
+    - '&cA jar file changed, but no plugin is associated'
+    - '&cwith it. If you wish to install and watch this'
+    - '&cplugin, please reload the server manually once.'
+    - '&cFile: &7%1$s'
+    - '&2--------------------------------------'
