@@ -90,14 +90,14 @@ public class WatchdogManager {
             String pluginName = other.getName();
 
             if(isPluginWatched(pluginName)) {
-                plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName());
+                plugin.broadcast("watchdog.watched-plugin-changed", filename, other.getName());
 
                 // Execute the reload action.
                 cfg_reloadAction.accept(other, file);
 
                 plugin.broadcast("watchdog.reload-action-success");
             }else {
-                plugin.broadcast("watchdog.unwatched-plugin-changed", filename, plugin.getName());
+                plugin.broadcast("watchdog.unwatched-plugin-changed", filename, other.getName());
             }
         }, cfg_actionDelay);
         delayedActions.put(filename, task);
