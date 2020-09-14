@@ -1,11 +1,14 @@
-# The command to execute when a watched plugin file is changed.
-# Placeholders:
-# %1$s  -  The plugin name
-#
-# Examples:
-# 'reload'
-# 'plugman reload %1$s'
-reload-command: 'reload'
+# The action to take for reloading the plugin.
+reload-action:
+  # The action type.
+  # Available action types:
+  #  RELOAD_SERVER
+  #  RELOAD_PLUGIN
+  #  EXECUTE_COMMAND
+  # Note! When EXECUTE_COMMAND is used, uncomment the 'command' line
+  action: RELOAD_PLUGIN
+
+  # command: 'plugman reload %s'
 
 # Delay in ticks between detecting a file change, and performing an action
 action-delay: 20

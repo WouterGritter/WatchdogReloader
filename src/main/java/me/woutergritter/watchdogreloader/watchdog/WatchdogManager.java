@@ -2,6 +2,7 @@ package me.woutergritter.watchdogreloader.watchdog;
 
 import me.woutergritter.watchdogreloader.Main;
 import me.woutergritter.watchdogreloader.config.Config;
+import me.woutergritter.watchdogreloader.watchdog.reloadaction.ReloadAction;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,7 +15,7 @@ public class WatchdogManager {
     private final Main plugin;
     private final File pluginsFolder;
 
-    private final String cfg_reloadCommand;
+    private final ReloadAction cfg_reloadAction;
     private final int cfg_actionDelay;
 
     private WatchService watcher;
@@ -27,7 +28,7 @@ public class WatchdogManager {
         this.plugin = plugin;
         this.pluginsFolder = plugin.getDataFolder().getParentFile();
 
-        cfg_reloadCommand = plugin.getConfig().getString("reload-command");
+        cfg_reloadAction = ReloadAction.fromConfig(plugin.getConfig().getConfigurationSection("reload-action"));
         cfg_actionDelay = plugin.getConfig().getInt("action-delay");
 
         try {
@@ -89,11 +90,12 @@ public class WatchdogManager {
             String pluginName = other.getName();
 
             if(isPluginWatched(pluginName)) {
-                // Execute the reload command.
-                String cmd = String.format(cfg_reloadCommand, plugin.getName());
-                plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName(), cmd);
+                plugin.broadcast("watchdog.watched-plugin-changed", filename, plugin.getName());
 
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                // Execute the reload action.
+                cfg_reloadAction.accept(other, file);
+
+                plugin.broadcast("watchdog.reload-action-success");
             }else {
                 plugin.broadcast("watchdog.unwatched-plugin-changed", filename, plugin.getName());
             }

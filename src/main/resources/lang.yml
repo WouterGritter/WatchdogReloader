@@ -37,8 +37,10 @@ watchdog:
     - '&3A plugin file that is watched has changed:'
     - '&3File: &7%1$s'
     - '&3Plugin: &7%2$s'
-    - '&3Executing the reload command: &7/%3$s'
+    - '&3Executing the reload action!'
     - '&2--------------------------------------'
+
+  reload-action-success: '&3Reload action executed successfully.'
 
   non-plugin-file-changed:
     - '&2--------------------------------------'
