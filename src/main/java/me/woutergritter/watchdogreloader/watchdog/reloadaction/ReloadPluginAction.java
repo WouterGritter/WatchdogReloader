@@ -25,11 +25,6 @@ public class ReloadPluginAction implements ReloadAction {
     }
 
     /**
-     * Unload a plugin.
-     *
-     * @param plugin the plugin to unload
-     * @return the message to send to the user.
-     *
      * Code taken from https://github.com/r-clancy/PlugMan/blob/master/src/main/java/com/rylinaux/plugman/util/PluginUtil.java#L374 - Thanks!
      */
     public static void unload(Plugin plugin) {
